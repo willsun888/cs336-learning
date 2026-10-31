@@ -1,0 +1,9 @@
+node_modules/
+research/
+output/
+BUILD-STATE.json
+*-preview.png
+.env
+.env.*
+.DS_Store
+__layout.html

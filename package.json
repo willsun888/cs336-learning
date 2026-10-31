@@ -1,0 +1,1 @@
+{"name":"cs336-learning","version":"1.0.0","private":true,"type":"module","scripts":{"build":"node tools/build.mjs","test":"node tools/validate.mjs"},"dependencies":{"katex":"0.16.22"}}

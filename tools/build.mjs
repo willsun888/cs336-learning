@@ -1,0 +1,12 @@
+import {readFile,writeFile,cp,mkdir} from 'node:fs/promises';
+import path from 'node:path';import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const course=JSON.parse(await readFile(path.join(root,'content/course.json'),'utf8'));
+const concepts=JSON.parse(await readFile(path.join(root,'content/concepts.json'),'utf8'));
+await writeFile(path.join(root,'docs/curriculum.js'),'// Original Chinese study notes. Sources are linked in every lecture.\nglobalThis.CURRICULUM = '+JSON.stringify(course.lectures,null,2)+';\nglobalThis.COURSE_META = '+JSON.stringify(course.meta,null,2)+';\n');
+await writeFile(path.join(root,'docs/concepts.js'),'// Supplemental explanations authored for this learning guide.\nglobalThis.CONCEPTS = '+JSON.stringify(concepts,null,2)+';\n');
+await mkdir(path.join(root,'docs/vendor/katex'),{recursive:true});
+for(const name of ['katex.min.js','katex.min.css','fonts'])await cp(path.join(root,'node_modules/katex/dist',name),path.join(root,'docs/vendor/katex',name),{recursive:true});
+await cp(path.join(root,'node_modules/katex/LICENSE'),path.join(root,'docs/vendor/katex/LICENSE'));
+await writeFile(path.join(root,'docs/.nojekyll'),'');
+console.log(`Built ${course.lectures.length} lectures / ${course.lectures.reduce((s,l)=>s+l.topics.length,0)} topics / ${concepts.length} concepts.`);
